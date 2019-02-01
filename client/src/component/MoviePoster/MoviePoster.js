@@ -2,7 +2,7 @@ import React, {Component, Fragment} from 'react';
 import {Image, Rating, TextArea, Form, Button} from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
-import { fetchMovie } from '../../store/actions';
+import { fetchMovie, addFavorites } from '../../store/actions';
 
 import './MoviePoster.scss';
 
@@ -28,7 +28,13 @@ class MoviePoster extends Component {
     }
 
     handleSubmit = () => {
-        console.log(this.state);
+        const { movie } = this.props.movie;
+        this.props.addFavorites({
+            ...movie,
+            rating: this.state.stars,
+            review: this.state.review
+        })
+
     }
 
     renderContent = () => {
@@ -92,4 +98,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps, { fetchMovie })(MoviePoster);
+export default connect(mapStateToProps, { fetchMovie, addFavorites })(MoviePoster);

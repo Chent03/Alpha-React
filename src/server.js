@@ -1,10 +1,16 @@
 const http = require('http');
 const express = require('express');
+const mongoose = require('mongoose');
+
+const keys = require('./config/keys');
+
+mongoose.connect(keys.mongoURI);
+require('./models/Favorites');
+
+
 const middlewares = require('./middleware');
 const routes = require('./services');
-
 const {applyMiddleware, applyRoutes } = require('./utils');
-
 const app = express();
 
 applyMiddleware(middlewares, app);
