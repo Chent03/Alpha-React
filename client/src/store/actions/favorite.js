@@ -1,11 +1,18 @@
 import axios from 'axios';
 
-import { FETCH_FAVORITES, LOADING_FAVORITES, ERROR_FAVORITES} from './types';
+import { 
+    POST_FAVORITES,
+    FETCH_FAVORITES, 
+    LOADING_FAVORITES, 
+    ERROR_FAVORITES
+} from './types';
 
 export const fetchFavorites = () => async dispatch => {
     dispatch({type: LOADING_FAVORITES})
     try {
+        console.log('firing')
         let res = await axios.get('/api/favorites');
+        dispatch({type: FETCH_FAVORITES, payload: res.data})
     } catch(er) {
         dispatch({type: ERROR_FAVORITES})
     }   
@@ -14,8 +21,8 @@ export const fetchFavorites = () => async dispatch => {
 export const addFavorites = (movie) => async dispatch => {
     dispatch({type: LOADING_FAVORITES})
     try {
-        console.log(movie);
-        let res = await axios.post('/api/favorites', movie)
+        await axios.post('/api/favorites', movie)
+        dispatch(fetchFavorites());
     } catch(er) {
         dispatch({type: ERROR_FAVORITES})
     }
@@ -29,9 +36,11 @@ export const updateFavorite = (movie) => async dispatch => {
     }
 }
 
-export const deleteFavorite = (movie) => async dispatch => {
+export const deleteFavorite = (id) => async dispatch => {
     try {
-        let res = await axios.delete('/api/favorite', movie)
+        let res = await axios.delete(`/api/favorites/${id}`)
+        console.log(res);
+        dispatch(fetchFavorites());
     } catch(er) {
         dispatch({type: ERROR_FAVORITES})
     }

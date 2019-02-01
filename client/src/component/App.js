@@ -6,8 +6,15 @@ import './App.scss';
 import { Home } from './Home';
 import { Favorites } from './Favorites';
 import MoviePoster from './MoviePoster/MoviePoster';
+import { connect } from 'react-redux';
+import { fetchFavorites } from '../store/actions';
+
 
 class App extends Component {
+    componentDidMount() {
+        this.props.fetchFavorites();
+    }
+    
     render() {
         return (
             <BrowserRouter>
@@ -16,8 +23,8 @@ class App extends Component {
                     <div className="container">
                         <Switch>
                             <Route exact path="/" component={Home} />
-                            <Route path="/:movie" component={MoviePoster} />
                             <Route exact path="/favorite" component={Favorites} />
+                            <Route path="/movie/:movie" component={MoviePoster} />
                             <Redirect to="/"/>
                         </Switch>
                     </div>        
@@ -28,4 +35,4 @@ class App extends Component {
 }
 
 
-export default App;
+export default connect(null, {fetchFavorites})(App);

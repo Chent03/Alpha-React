@@ -1,6 +1,7 @@
 import React, {Component, Fragment} from 'react';
 import {Image, Rating, TextArea, Form, Button} from 'semantic-ui-react';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 
 import { fetchMovie, addFavorites } from '../../store/actions';
 
@@ -11,12 +12,17 @@ class MoviePoster extends Component {
         super(props);
         this.state = {
             stars: 0,
-            review: ''
+            review: '',
+            editMode: false
         }
     }
+
+    componentWillMount() {
+
+    }
+
     componentDidMount() {
         this.props.fetchMovie(this.props.match.params.movie)
-        
     }
 
     onHandleInput = (e, {data}) => {
@@ -34,7 +40,7 @@ class MoviePoster extends Component {
             rating: this.state.stars,
             review: this.state.review
         })
-
+        this.props.history.push('/favorite')
     }
 
     renderContent = () => {
@@ -94,7 +100,8 @@ class MoviePoster extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        movie: state.imdb
+        movie: state.imdb,
+        list: state.favoritesList.movieList
     }
 }
 

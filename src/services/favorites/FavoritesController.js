@@ -5,7 +5,7 @@ exports.post_favorite = async(movie) => {
     const { Title, Year, Plot, Poster, rating, review} = movie;
     try {
         let findone = await Favorites.findOne({title: Title})
-        if(findone.id) {
+        if(findone) {
             return {success: false, message: 'Already exist'}
         } else {
             const movie = new Favorites({
@@ -29,7 +29,8 @@ exports.post_favorite = async(movie) => {
 
 exports.get_favorites = async(movie) => {
     try {
-        return await Favorites.find();
+        let movies = await Favorites.find();
+        return movies;
     } catch(er) {
         console.log(er);
         return {success: false, message: 'Failed to load list'}
@@ -46,10 +47,20 @@ exports.update_favorite = async(id, movie) => {
 }
 
 exports.delete_favorite = async(id) => {
+    console.log(id);
     try {
-        return await Favorites.findOneAndDelete(id);
+        return await Favorites.findByIdAndDelete(id);
     } catch(er) {
         console.log(er);
         return {success: false, message: 'Failed to delete'}
+    }
+}
+
+exports.find_favorite = async(title) => {
+    try {
+        return await Favorites.findOne({title: title})
+    } catch(er) {
+        console.log(er);
+        return {success: false, message: 'Can not find movie'}
     }
 }

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Button, Icon, Input } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { fetchMovie } from '../../store/actions';
@@ -20,7 +20,7 @@ class Home extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.fetchMovie(this.state.value)
-        this.props.history.push(`/${this.state.value}`)
+        this.props.history.push(`/movie/${this.state.value}`)
         this.setState({value: ''})
     }
 
@@ -43,9 +43,9 @@ class Home extends Component {
 
     render() {
         return(
-            <div>
+            <Fragment>
                 {this.renderContent()}
-            </div>
+            </Fragment>
         )
     }
 }
