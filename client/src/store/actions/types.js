@@ -1,5 +1,7 @@
 export const NAVIGATE_USER = 'navigate_user';
 export const FETCH_MOVIE = 'fetch_movie';
+export const LOADING_IMDB = 'loading_imdb';
+export const ERROR_IMDB = 'error_imdb';
 
 export const FETCH_FAVORITES = 'fetch_favorites';
 export const POST_FAVORITES = 'post_favorites';

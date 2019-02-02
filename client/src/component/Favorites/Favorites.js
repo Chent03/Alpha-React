@@ -1,6 +1,8 @@
 import React, {Component, Fragment} from 'react';
 import { connect } from 'react-redux';
-import { Button, Card, Image, Rating } from 'semantic-ui-react';
+import { Card} from 'semantic-ui-react';
+
+import { MovieCard, Loading } from '../../ui';
 
 import { fetchFavorites, deleteFavorite } from '../../store/actions';
 
@@ -12,7 +14,6 @@ class Favorites extends Component {
     }
 
     handleDelete = (id) => {
-        console.log(id);
         this.props.deleteFavorite(id);
     }
 
@@ -24,37 +25,24 @@ class Favorites extends Component {
         if(this.props.list.length > 0) {
             return this.props.list.map((movie) => {
                 return (
-                    <Card key={movie._id}>
-                        <Card.Content>
-                            <Image floated="right" size="mini" src={movie.poster} />
-                            <Card.Header>{movie.title} ({movie.year})</Card.Header>
-                            <Card.Meta><Rating icon="star" rating={movie.rating} maxRating={5} disabled/></Card.Meta>
-                            <Card.Description>
-                                <p><b>Review:</b></p>
-                                {movie.review}
-                            </Card.Description>
-                        </Card.Content>
-                        <Card.Content extra>
-                            <div className='ui two buttons'>
-                            <Button basic color='yellow' onClick={() => this.handleEdit(movie.title)}>
-                            Edit
-                            </Button>
-                            <Button basic color='red' onClick={() => this.handleDelete(movie._id)}>
-                            Remove
-                            </Button>
-                            </div>
-                        </Card.Content>
-                    </Card>
-                    
+                    <MovieCard
+                        key={movie._id}
+                        movie={movie}
+                        editHandler={this.handleEdit}
+                        deleteHandler={this.handleDelete}
+                    />
                 )
             })
         }
     }
     render() {
         return(
-            <Card.Group className="cardGroup">
-                {this.renderContent()}
-            </Card.Group>
+            <Loading active={this.props.loading}>
+                <Card.Group className="cardGroup">
+                    {this.renderContent()}
+                </Card.Group>
+            </Loading>
+            
         )
     }
 }
@@ -62,7 +50,9 @@ class Favorites extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        list: state.favoritesList.movieList
+        list: state.favoritesList.movieList,
+        loading: state.favoritesList.loading,
+        errorLoading: state.favoritesList.errorLoading
     }
 }
 

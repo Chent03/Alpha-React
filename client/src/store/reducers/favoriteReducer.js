@@ -9,7 +9,7 @@ import {
 
 const initState = {
     loading: false,
-    error: false,
+    errorLoading: false,
     movieList: []
 }
 
@@ -36,7 +36,7 @@ const loadingFavorites = (state) => {
     return {
         ...state,
         loading: true,
-        error: false
+        errorLoading: false
     }
 }
 
@@ -44,7 +44,7 @@ const errorFavorites = (state) => {
     return {
         ...state,
         loading: false,
-        error: true
+        errorLoading: true
     }
 }
 

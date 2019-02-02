@@ -22,18 +22,19 @@ export const addFavorites = (movie) => async dispatch => {
     dispatch({type: LOADING_FAVORITES})
     try {
         await axios.post('/api/favorites', movie)
-        dispatch(fetchFavorites());
     } catch(er) {
         dispatch({type: ERROR_FAVORITES})
     }
+    dispatch(fetchFavorites());
 }
 
-export const updateFavorite = (movie) => async dispatch => {
+export const updateFavorite = (id, rating, review) => async dispatch => {
     try {
-        let res = await axios.put('/api/favorites', movie)
+        await axios.patch(`/api/favorites/${id}`, {rating: rating, review: review})
     } catch(er) {
         dispatch({type: ERROR_FAVORITES})
     }
+    dispatch(fetchFavorites());
 }
 
 export const deleteFavorite = (id) => async dispatch => {

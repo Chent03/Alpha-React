@@ -1,9 +1,9 @@
 import React, {Component, Fragment} from 'react';
-import {Image, Rating, TextArea, Form, Button} from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
+import { fetchMovie, addFavorites, updateFavorite } from '../../store/actions';
 
-import { fetchMovie, addFavorites } from '../../store/actions';
+import { MovieDetails, Loading } from '../../ui';
 
 import './MoviePoster.scss';
 
@@ -13,16 +13,20 @@ class MoviePoster extends Component {
         this.state = {
             stars: 0,
             review: '',
-            editMode: false
         }
-    }
-
-    componentWillMount() {
-
     }
 
     componentDidMount() {
         this.props.fetchMovie(this.props.match.params.movie)
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const { movie } = nextProps;
+        console.log(movie, 'wtf');
+        if(movie.ID) {
+            this.setState({stars: movie.rating, review: movie.review })
+        }
+        console.log(this.state);
     }
 
     onHandleInput = (e, {data}) => {
@@ -34,7 +38,7 @@ class MoviePoster extends Component {
     }
 
     handleSubmit = () => {
-        const { movie } = this.props.movie;
+        const { movie } = this.props;
         this.props.addFavorites({
             ...movie,
             rating: this.state.stars,
@@ -43,41 +47,34 @@ class MoviePoster extends Component {
         this.props.history.push('/favorite')
     }
 
+    handleEdit = () => {
+        const { movie } = this.props;
+        this.props.updateFavorite(movie.ID, this.state.stars, this.state.review)
+        this.props.history.push('/favorite');
+    }
+    
+    handleRate = (stars) => {
+        this.setState({stars: stars})
+    }
+
     renderContent = () => {
-        const { movie } = this.props.movie
+        const { movie } = this.props
         if(movie && (movie.Response)) {
             const {Poster, Year, Title, Plot } = movie;
             return (
-                <div id="movieContainer">
-                    <div id="posterImage">
-                        <Image src={Poster} />
-                    </div>
-                    <div id="content">
-                        <h1>{Title} ({Year})</h1>
-                        <h3>Plot</h3>
-                        <p>{Plot}</p>
-                        <div>
-                            <Form onSubmit={this.handleSubmit}>
-                                <Rating 
-                                    icon="star"
-                                    size="huge"
-                                    name="star"
-                                    maxRating={5}
-                                    onRate={(e, data) => this.setState({stars: data.rating})}
-                                />
-                                <TextArea 
-                                    autoHeight
-                                    name="review"
-                                    placeholder='Add a review'
-                                    value={this.state.review}
-                                    onChange={this.onHandleInput}
-                                />
-                                <Button type="submit" primary>Add to favorite</Button>
-                            </Form>
-        
-                        </div>
-                    </div>
-                </div>
+                <MovieDetails 
+                    Poster={Poster}
+                    Year={Year}
+                    Title={Title}
+                    Plot={Plot}
+                    ID={movie.ID? movie.ID : false}
+                    stars={this.state.stars}
+                    review={this.state.review}
+                    handleInput={this.onHandleInput}
+                    handleRate={this.handleRate}
+                    handleEdit={this.handleEdit}
+                    handleSubmit={this.handleSubmit}
+                />
             )
         } else if(movie && (!movie.Response)) {
             return (
@@ -90,19 +87,22 @@ class MoviePoster extends Component {
 
     render() {
         return (
-            <Fragment>
-                {this.renderContent()}
-            </Fragment>
-
+            <Loading active={this.props.loading}>
+                <Fragment>
+                    {this.renderContent()}
+                </Fragment>
+            </Loading>
         )
     }
 }
 
 const mapStateToProps = (state) => {
     return {
-        movie: state.imdb,
+        movie: state.imdb.movie,
+        loading: state.imdb.loading,
+        errorLoading: state.imdb.errorLoading,
         list: state.favoritesList.movieList
     }
 }
 
-export default connect(mapStateToProps, { fetchMovie, addFavorites })(MoviePoster);
+export default connect(mapStateToProps, { fetchMovie, addFavorites, updateFavorite })(MoviePoster);

@@ -8,36 +8,65 @@ class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: '',
-            showPoster: false
+            fields: {
+                search: ''
+            },
+            errors: {
+                search: ''
+            }
         }
     }
 
     handleInput = (e) => {
-        this.setState({value: e.target.value})
+        let fields = this.state.fields;
+        fields[e.target.name] = e.target.value;
+        this.setState({
+            fields
+        })
     }
 
     handleSubmit = (e) => {
         e.preventDefault();
-        this.props.fetchMovie(this.state.value)
-        this.props.history.push(`/movie/${this.state.value}`)
-        this.setState({value: ''})
+        if(this.validate()) {
+            this.props.fetchMovie(this.state.fields.search)
+            this.setState({value: ''})
+            this.props.history.push(`/movie/${this.state.value}`)
+        }
+        
+    }
+
+    validate = () => {
+        let fields =  this.state.fields;
+        let errors = {};
+        let isValid = true;
+        if(!fields.search) {
+            isValid = false;
+            errors['search'] = "Please enter a movie"
+        }
+        this.setState({errors})
+        return isValid;
     }
 
     renderContent = () => {
         return (
-            <form id="searchForm" onSubmit={this.handleSubmit}>
+            <form id="searchContainer" onSubmit={this.handleSubmit}>
+                <div id="searchForm">
                 <Input
-                    type="text"
-                    name="search"
-                    placeholder="Please Enter a Move Title" 
-                    onChange={this.handleInput}
-                    value={this.state.value}
+                error={!!this.state.errors.search}
+                type="text"
+                name="search"
+                placeholder="Please Enter a Move Title" 
+                onChange={this.handleInput}
+                value={this.state.fields.search}
                 />
                 <Button icon type="submit">
                     <Icon name="sistrix"/>
                 </Button>
+                </div>
+               
             </form>
+            
+            
         )
     }
 

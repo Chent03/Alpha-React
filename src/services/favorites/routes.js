@@ -10,7 +10,6 @@ module.exports = app => {
     app.post('/api/favorites', async (req, res) => {
         let data = req.body;
         let payload = await post_favorite(data);
-        console.log(payload);
         respondWithPayload(res, payload);
 
     })
@@ -21,9 +20,8 @@ module.exports = app => {
 
     })
 
-    app.put('/api/favorites/:movie_id', async(req, res) => {
-        const {id, movie} = req.body;
-        let payload = await update_favorite(id, movie)
+    app.patch('/api/favorites/:movie_id', async(req, res) => {
+        let payload = await update_favorite(req.params.movie_id, req.body)
         respondWithPayload(res, payload);
 
     })

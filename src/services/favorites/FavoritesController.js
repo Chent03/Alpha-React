@@ -9,6 +9,7 @@ exports.post_favorite = async(movie) => {
             return {success: false, message: 'Already exist'}
         } else {
             const movie = new Favorites({
+                searchKey: Title.toLowerCase(),
                 title: Title, 
                 plot: Plot,
                 year: Year,
@@ -47,7 +48,6 @@ exports.update_favorite = async(id, movie) => {
 }
 
 exports.delete_favorite = async(id) => {
-    console.log(id);
     try {
         return await Favorites.findByIdAndDelete(id);
     } catch(er) {
@@ -58,7 +58,7 @@ exports.delete_favorite = async(id) => {
 
 exports.find_favorite = async(title) => {
     try {
-        return await Favorites.findOne({title: title})
+        return await Favorites.findOne({searchKey: title})
     } catch(er) {
         console.log(er);
         return {success: false, message: 'Can not find movie'}
