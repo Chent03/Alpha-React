@@ -1,4 +1,3 @@
-export const NAVIGATE_USER = 'navigate_user';
 export const FETCH_MOVIE = 'fetch_movie';
 export const LOADING_IMDB = 'loading_imdb';
 export const ERROR_IMDB = 'error_imdb';

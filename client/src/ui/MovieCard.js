@@ -2,6 +2,14 @@ import React from 'react';
 import { Button, Card, Image, Rating } from 'semantic-ui-react';
 
 const MovieCard = ({movie, editHandler, deleteHandler}) => {
+    const renderReadMore = (review, title) => {
+        if(review.length <= 30) {
+            return <p className="movieReview">{review}</p>
+        } else {
+            return <p className="movieReview">{review.substr(0, 30)}...</p>
+        }
+        
+    }
     return (
         <Card>
             <Card.Content>
@@ -10,7 +18,9 @@ const MovieCard = ({movie, editHandler, deleteHandler}) => {
                 <Card.Meta><Rating icon="star" rating={movie.rating} maxRating={5} disabled/></Card.Meta>
                 <Card.Description>
                     <p><b>Review:</b></p>
-                    {movie.review}
+                    <section onClick={() => editHandler(movie.title)} className="reviewSection">
+                        {renderReadMore(movie.review, movie.title)}
+                    </section>
                 </Card.Description>
             </Card.Content>
             <Card.Content extra>

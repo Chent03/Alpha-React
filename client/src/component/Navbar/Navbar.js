@@ -1,36 +1,24 @@
 import React from 'react';
 import { Menu } from 'semantic-ui-react';
-import {connect} from 'react-redux';
 import { Link } from 'react-router-dom';
+import {withRouter} from 'react-router-dom';
 
-import {navigateUser} from '../../store/actions';
-
-const NavBar = ({nav, browseTo}) => {
-    const handleMenuClick = (e, { name }) => {
-        browseTo(name);
-    }
+const NavBar = ({location}) => {
     return (
             <Menu pointing secondary>
                 <Menu.Item 
                     name="home" 
-                    active={nav.active === "home"} 
+                    active={location.pathname === "/"} 
                     as={Link} to="/"
-                    onClick={handleMenuClick} />
+                    />
                 <Menu.Item
-                    name="favorite"
+                    name="favorites"
                     as={Link}
                     to="/favorite"
-                    active={nav.active === "favorite"}
-                    onClick={handleMenuClick}
+                    active={location.pathname.includes("favorite")}
                 />
             </Menu>
     )
 }
 
-const mapStateToProps =(state) => {
-    return {
-        nav: state.nav
-    }
-}
-
-export default connect(mapStateToProps, { browseTo: navigateUser})(NavBar);
+export default withRouter(NavBar);

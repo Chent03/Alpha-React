@@ -16,6 +16,7 @@ class App extends Component {
     }
     
     render() {
+        console.log(this.props);
         return (
             <BrowserRouter>
                 <Fragment>
@@ -34,5 +35,6 @@ class App extends Component {
     }
 }
 
+App = connect(null, {fetchFavorites})(App);
 
-export default connect(null, {fetchFavorites})(App);
+export default App;

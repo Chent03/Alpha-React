@@ -4,7 +4,7 @@ const validateOjbect = (obj, ...keys) => {
         if(typeof(obj[i]) === 'undefined') {
             errors.push(`${i} is required`);
         } else {
-            if(obj[i].replace(/\s/g, "") === "") {
+            if(obj[i] === "") {
                 errors.push(`${i} is required`);
             }
         }
