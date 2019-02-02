@@ -7,7 +7,13 @@ const getMovie = async(title) => {
     const key = keys.omdbAPI;
     title = title.toLowerCase();
     try {
-        let movie = await find_favorite(title);
+        let res = await axios.get(omdblink, {
+            params: {
+                apikey: key,
+                t: title
+            }
+        })
+        let movie = await find_favorite(res.data.Title);
         if(movie) {
             const { title, year, _id, plot, poster, rating, review} = movie;
             return {
@@ -21,12 +27,6 @@ const getMovie = async(title) => {
                 Response: 'True'
             }
         } else {
-            let res = await axios.get(omdblink, {
-                params: {
-                    apikey: key,
-                    t: title
-                }
-            })
             return res.data;
         }
     } catch(er) {

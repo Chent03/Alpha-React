@@ -1,7 +1,12 @@
 const mongoose = require('mongoose');
 const Favorites = mongoose.model('favorites');
+const { validateOjbect } = require('../../validators/validate');
 
 exports.post_favorite = async(movie) => {
+    let val = validateOjbect(movie, 'Title', 'Year', 'Plot', 'Poster', 'rating', 'review');
+    if(val.length) {
+        return {success: false, message: val}
+    }
     const { Title, Year, Plot, Poster, rating, review} = movie;
     try {
         let findone = await Favorites.findOne({title: Title})
@@ -28,7 +33,7 @@ exports.post_favorite = async(movie) => {
     }
 }
 
-exports.get_favorites = async(movie) => {
+exports.get_favorites = async() => {
     try {
         let movies = await Favorites.find();
         return movies;
@@ -39,6 +44,10 @@ exports.get_favorites = async(movie) => {
 }
 
 exports.update_favorite = async(id, movie) => {
+    let val = validateOjbect(movie, 'rating', 'review')
+    if(val.length){
+        return {success: false, message: val}
+    }
     try {
         return await Favorites.findByIdAndUpdate(id, movie)
     } catch(er) {
@@ -49,7 +58,12 @@ exports.update_favorite = async(id, movie) => {
 
 exports.delete_favorite = async(id) => {
     try {
-        return await Favorites.findByIdAndDelete(id);
+        let res = await Favorites.findByIdAndDelete(id);
+       if(res) {
+            return res;
+       } else {
+            return {success: false, message: 'Failed to delete'}
+       }
     } catch(er) {
         console.log(er);
         return {success: false, message: 'Failed to delete'}
@@ -58,7 +72,7 @@ exports.delete_favorite = async(id) => {
 
 exports.find_favorite = async(title) => {
     try {
-        return await Favorites.findOne({searchKey: title})
+        return await Favorites.findOne({title: title})
     } catch(er) {
         console.log(er);
         return {success: false, message: 'Can not find movie'}

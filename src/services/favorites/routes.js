@@ -5,7 +5,6 @@ const {
     delete_favorite
 } = require('./FavoritesController');
 
-
 module.exports = app => {
     app.post('/api/favorites', async (req, res) => {
         let data = req.body;
