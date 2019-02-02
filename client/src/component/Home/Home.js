@@ -29,8 +29,8 @@ class Home extends Component {
         e.preventDefault();
         if(this.validate()) {
             this.props.fetchMovie(this.state.fields.search)
+            this.props.history.push(`/movie/${this.state.fields.search}`)
             this.setState({value: ''})
-            this.props.history.push(`/movie/${this.state.value}`)
         }
         
     }
@@ -52,6 +52,7 @@ class Home extends Component {
             <form id="searchContainer" onSubmit={this.handleSubmit}>
                 <div id="searchForm">
                 <Input
+                className="searchBar"
                 error={!!this.state.errors.search}
                 type="text"
                 name="search"

@@ -10,7 +10,6 @@ import {
 export const fetchFavorites = () => async dispatch => {
     dispatch({type: LOADING_FAVORITES})
     try {
-        console.log('firing')
         let res = await axios.get('/api/favorites');
         dispatch({type: FETCH_FAVORITES, payload: res.data})
     } catch(er) {
@@ -39,8 +38,7 @@ export const updateFavorite = (id, rating, review) => async dispatch => {
 
 export const deleteFavorite = (id) => async dispatch => {
     try {
-        let res = await axios.delete(`/api/favorites/${id}`)
-        console.log(res);
+        await axios.delete(`/api/favorites/${id}`)
         dispatch(fetchFavorites());
     } catch(er) {
         dispatch({type: ERROR_FAVORITES})

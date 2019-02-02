@@ -1,7 +1,7 @@
 import React from 'react';
 import {Image, Rating, TextArea, Form, Button} from 'semantic-ui-react';
 
-const MovieDetail = ({Poster, Title, Year, ID, Plot, stars, review, handleInput, handleRate, handleEdit, handleSubmit}) => {
+const MovieDetail = ({Poster, Title, Year, ID, Plot, stars, review, handleInput, handleRate, handleEdit, handleSubmit, errors}) => {
     return (
         <div id="movieContainer">
             <div id="posterImage">
@@ -21,13 +21,14 @@ const MovieDetail = ({Poster, Title, Year, ID, Plot, stars, review, handleInput,
                             rating={stars}
                             onRate={(e, data) => handleRate(data.rating)}
                         />
-                        <TextArea 
+                        <TextArea            
                             autoHeight
                             name="review"
                             placeholder='Add a review'
                             value={review}
                             onChange={handleInput}
                         />
+                        <div style={{color: "#cc0000", marginBottom: "12px"}}>{errors.review}</div>
                         <Button type="submit" primary>{ID ? 'Save' : 'Add to favorites'}</Button>
                     </Form>
 

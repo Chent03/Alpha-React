@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 import { fetchMovie, addFavorites, updateFavorite } from '../../store/actions';
 
-import { MovieDetails, Loading } from '../../ui';
+import { MovieDetails, Loading, ErrorMsg } from '../../ui';
 
 import './MoviePoster.scss';
 
@@ -11,8 +11,13 @@ class MoviePoster extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            stars: 0,
-            review: '',
+            fields : {
+                stars: 0,
+                review: ''
+            },
+            errors: {
+                review: '',
+            }
         }
     }
 
@@ -22,40 +27,63 @@ class MoviePoster extends Component {
 
     componentWillReceiveProps(nextProps) {
         const { movie } = nextProps;
-        console.log(movie, 'wtf');
+        let fields = this.state.fields;
         if(movie.ID) {
-            this.setState({stars: movie.rating, review: movie.review })
+            fields.stars = movie.rating
+            fields.review = movie.review
+            this.setState({fields})
         }
-        console.log(this.state);
     }
 
     onHandleInput = (e, {data}) => {
-        if(e.target.name === 'star') {
-            this.setState({stars: e.target.value})
-        } else {
-            this.setState({review: e.target.value})
-        }
+        let fields = this.state.fields;
+        fields[e.target.name] = e.target.value;
+        this.setState({
+            fields
+        })
     }
 
     handleSubmit = () => {
         const { movie } = this.props;
-        this.props.addFavorites({
-            ...movie,
-            rating: this.state.stars,
-            review: this.state.review
-        })
-        this.props.history.push('/favorite')
+        let fields = this.state.fields;
+        if(this.validate()){
+            this.props.addFavorites({
+                ...movie,
+                rating: fields.stars,
+                review: fields.review
+            })
+            this.props.history.push('/favorite')
+        }
     }
 
     handleEdit = () => {
         const { movie } = this.props;
-        this.props.updateFavorite(movie.ID, this.state.stars, this.state.review)
-        this.props.history.push('/favorite');
+        let fields = this.state.fields;
+        if(this.validate()) {
+            this.props.updateFavorite(movie.ID, fields.stars, fields.review)
+            this.props.history.push('/favorite');
+        }
+    
     }
     
     handleRate = (stars) => {
-        this.setState({stars: stars})
+        let fields = this.state.fields;
+        fields.stars = stars;
+        this.setState({fields})
     }
+
+    validate = () => {
+        let fields =  this.state.fields;
+        let errors = {};
+        let isValid = true;
+        if(!fields.review) {
+            isValid = false;
+            errors['review'] = "Please enter a review"
+        }
+        this.setState({errors})
+        return isValid;
+    }
+
 
     renderContent = () => {
         const { movie } = this.props
@@ -67,9 +95,10 @@ class MoviePoster extends Component {
                     Year={Year}
                     Title={Title}
                     Plot={Plot}
+                    errors={this.state.errors}
                     ID={movie.ID? movie.ID : false}
-                    stars={this.state.stars}
-                    review={this.state.review}
+                    stars={this.state.fields.stars}
+                    review={this.state.fields.review}
                     handleInput={this.onHandleInput}
                     handleRate={this.handleRate}
                     handleEdit={this.handleEdit}
@@ -79,7 +108,7 @@ class MoviePoster extends Component {
         } else if(movie && (!movie.Response)) {
             return (
                 <div>
-                    <h2>{movie.errorMsg}</h2>
+                    <ErrorMsg text={movie.errorMsg} size={"large"}/>
                 </div>
             )
         }

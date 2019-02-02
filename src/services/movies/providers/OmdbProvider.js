@@ -8,7 +8,6 @@ const getMovie = async(title) => {
     title = title.toLowerCase();
     try {
         let movie = await find_favorite(title);
-        console.log(movie);
         if(movie) {
             const { title, year, _id, plot, poster, rating, review} = movie;
             return {
