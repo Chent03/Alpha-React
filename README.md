@@ -2,6 +2,10 @@
 
 This is for Alpha's coding assignment, using Node.js, Express, Mongo, and React.
 
+## Demo
+
+[Alpha](http://alphareact-env.qxzdqpgar2.us-east-2.elasticbeanstalk.com/)
+
 ## Installation
 
 The preferred way to run the application is to run docker-compose at the root directory of the application.
