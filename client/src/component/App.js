@@ -6,17 +6,10 @@ import './App.scss';
 import { Home } from './Home';
 import { Favorites } from './Favorites';
 import MoviePoster from './MoviePoster/MoviePoster';
-import { connect } from 'react-redux';
-import { fetchFavorites } from '../store/actions';
-
 
 class App extends Component {
-    componentDidMount() {
-        this.props.fetchFavorites();
-    }
     
     render() {
-        console.log(this.props);
         return (
             <BrowserRouter>
                 <Fragment>
@@ -34,7 +27,5 @@ class App extends Component {
         )
     }
 }
-
-App = connect(null, {fetchFavorites})(App);
 
 export default App;
