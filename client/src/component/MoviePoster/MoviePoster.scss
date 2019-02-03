@@ -1,7 +1,21 @@
-#movieContainer {
+.movieContainer {
     display: flex;
+    flex-direction: column;
+    .posterImage {
+        display: flex;
+        justify-content: center;
+    }
     #content {
         width: 100%;
         padding: 20px;
+    }
+}
+
+@media only screen and (min-width: 717px) {
+    .movieContainer {
+        flex-direction: row;
+        .posterImage {
+            display: block;
+        }
     }
 }

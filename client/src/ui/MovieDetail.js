@@ -3,8 +3,8 @@ import {Image, Rating, TextArea, Form, Button} from 'semantic-ui-react';
 
 const MovieDetail = ({Poster, Title, Year, ID, Plot, stars, review, handleInput, handleRate, handleEdit, handleSubmit, errors}) => {
     return (
-        <div id="movieContainer">
-            <div id="posterImage">
+        <div className="movieContainer">
+            <div className="posterImage">
                 <Image src={Poster} />
             </div>
             <div id="content">

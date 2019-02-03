@@ -1,6 +1,5 @@
 import React, {Component, Fragment} from 'react';
 import { connect } from 'react-redux';
-import _ from 'lodash';
 import { fetchMovie, addFavorites, updateFavorite } from '../../store/actions';
 
 import { MovieDetails, Loading, ErrorMsg } from '../../ui';

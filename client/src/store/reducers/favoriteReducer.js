@@ -2,7 +2,6 @@ import {
     UPDATE_FAVORITES,
     DELETE_FAVORITE, 
     FETCH_FAVORITES, 
-    POST_FAVORITES, 
     LOADING_FAVORITES,
     ERROR_FAVORITES
 } from '../actions/types';
@@ -17,8 +16,6 @@ const reducer = (state = initState, action) => {
     switch(action.type) {
         case FETCH_FAVORITES:
             return fetchFavorites(state, action);
-        case POST_FAVORITES:
-            return postFavorites(state, action);
         case UPDATE_FAVORITES:
             return;
         case DELETE_FAVORITE:
@@ -53,14 +50,6 @@ const fetchFavorites = (state, action) => {
         ...state,
         loading: false,
         movieList: action.payload
-    }
-}
-
-const postFavorites = (state, action) => {
-    return {
-        ...state,
-        loading: false,
-        movieList: [...state.movieList, action.payload]
     }
 }
 

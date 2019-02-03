@@ -4,7 +4,9 @@ const mongoose = require('mongoose');
 
 const keys = require('./config/keys');
 
-mongoose.connect(keys.mongoURI);
+mongoose.connect(keys.mongoURI).then(() => {
+    console.log('Connected to Mongodb')
+});
 require('./models/Favorites');
 
 

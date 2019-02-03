@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 import { 
-    POST_FAVORITES,
     FETCH_FAVORITES, 
     LOADING_FAVORITES, 
     ERROR_FAVORITES
