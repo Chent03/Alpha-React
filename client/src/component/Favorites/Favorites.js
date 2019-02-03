@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import { Card} from 'semantic-ui-react';
 
-import { MovieCard, Loading } from '../../ui';
+import { MovieCard, Loading, WarningMsg } from '../../ui';
 
 import { fetchFavorites, deleteFavorite } from '../../store/actions';
 
@@ -33,6 +33,14 @@ class Favorites extends Component {
                     />
                 )
             })
+        } else {
+            return (
+                <WarningMsg
+                    className="warningMsg"
+                    text={'Please add some movies.'}
+                    size={'big'}
+                />
+            )
         }
     }
     render() {
