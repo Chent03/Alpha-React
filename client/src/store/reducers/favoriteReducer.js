@@ -16,10 +16,6 @@ const reducer = (state = initState, action) => {
     switch(action.type) {
         case FETCH_FAVORITES:
             return fetchFavorites(state, action);
-        case UPDATE_FAVORITES:
-            return;
-        case DELETE_FAVORITE:
-            return;
         case LOADING_FAVORITES: 
             return loadingFavorites(state);
         case ERROR_FAVORITES:
