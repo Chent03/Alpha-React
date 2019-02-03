@@ -1,4 +1,4 @@
-# Alpa Full Stack Assignment
+# Alpha Full Stack Assignment
 
 This is for Alpha's coding assignment, using Node.js, Express, Mongo, and React.
 
