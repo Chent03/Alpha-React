@@ -1,0 +1,31 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t chent03/alpha-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run chent03/alpha-test npm test -- --coverage
+
+after_success:
+  - docker build -t chent03/alpha-client ./client
+  - docker build -t chent03/alpha-server .
+  - docker build -t chent03/alpha-nginx ./nginx
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push chent03/alpha-client
+  - docker push chent03/alpha-server
+  - docker push chent03/alpha-nginx
+
+deploy:
+  provider: elasticbeanstalk
+  region: us-east-2
+  app: Alpha-react
+  env: AlphaReact-env
+  bucket_name: elasticbeanstalk-us-east-2-337456930219
+  bucket_path: alpha-react
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: 
+    secure: $AWS_SECRET_KEY
