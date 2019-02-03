@@ -18,6 +18,11 @@ const app = express();
 applyMiddleware(middlewares, app);
 applyRoutes(routes, app);
 
+
+app.get('*', (req, res) => {
+    res.status(404).send('Route does not exist');
+})
+
 const PORT = process.env.PORT || 5000;
 
 const server = http.createServer(app);
